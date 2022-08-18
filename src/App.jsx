@@ -219,7 +219,7 @@ function App() {
               fontSize: "16px",
             }}
           >
-            sdfjksdvjs
+            Task
           </p>
         </div>
         <span>
@@ -258,7 +258,7 @@ function App() {
               fontSize: "16px",
             }}
           >
-            sdfjksdvjs
+            Sub-Task
           </p>
         </div>
         <span>

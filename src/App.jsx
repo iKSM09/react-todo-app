@@ -1,15 +1,41 @@
 import { useState } from "react";
-import { MdAddCircleOutline, MdRadioButtonUnchecked } from "react-icons/md";
+import {
+  MdAddCircleOutline,
+  MdTaskAlt,
+  MdRadioButtonUnchecked,
+  MdDelete,
+} from "react-icons/md";
 
 import "./App.css";
 
 function App() {
-  const [todos, setTodos] = useState([
-    { id: "sdfb", task: "slfdsidf" },
-    { id: "dbjh", task: "sfkjsdilf" },
-    { id: "ksda", task: "lsjdfiosdhf" },
-    { id: "djkf", task: "wpoejfwe" },
-  ]);
+  const [todos, setTodos] = useState([]);
+
+  const addNewTask = (e) => {
+    if (e.key === "Enter") {
+      const newTask = {
+        id: new Date().getTime().toString(),
+        task: e.target.value,
+      };
+      setTodos([...todos, newTask]);
+      e.target.value = "";
+    }
+  };
+
+  const completeTask = (id) => {
+    let completedTask = todos.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, completed: !todo.completed };
+      }
+      return todo;
+    });
+    setTodos(completedTask);
+  };
+
+  const deleteTask = (id) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(updatedTodos);
+  };
 
   return (
     <div className="App">
@@ -25,13 +51,7 @@ function App() {
         <input
           type="text"
           placeholder="Add a Task"
-          onKeyPress={(e) =>
-            e.key === "Enter" &&
-            setTodos([
-              ...todos,
-              { id: new Date().getTime().toString(), task: e.target.value },
-            ])
-          }
+          onKeyPress={addNewTask}
           style={{
             border: "none",
             outline: "none",
@@ -44,22 +64,47 @@ function App() {
       {todos.map((todo) => (
         <div
           key={todo.id}
+          className="task"
           style={{
             display: "flex",
-            // justifyContent: "center",
+            justifyContent: "space-between",
             alignItems: "center",
             marginBlock: "4px",
           }}
         >
-          <MdRadioButtonUnchecked style={{ fontSize: "18px", margin: "6px" }} />
-          <p
+          <div
             style={{
-              fontSize: "16px",
-              margin: 0,
+              display: "flex",
+              alignItems: "center",
+              marginBlock: "4px",
             }}
           >
-            {todo.task}
-          </p>
+            <span
+              onClick={() => completeTask(todo.id)}
+              style={{ lineHeight: "0px" }}
+            >
+              {todo.completed ? (
+                <MdTaskAlt style={{ fontSize: "18px", margin: "6px" }} />
+              ) : (
+                <MdRadioButtonUnchecked
+                  style={{ fontSize: "18px", margin: "6px" }}
+                />
+              )}
+            </span>
+            <p
+              style={{
+                margin: 0,
+                fontSize: "16px",
+                textDecoration: todo.completed ? "line-through" : null,
+              }}
+            >
+              {todo.task}
+            </p>
+          </div>
+          <MdDelete
+            onClick={() => deleteTask(todo.id)}
+            style={{ fontSize: "18px", margin: "6px" }}
+          />
         </div>
       ))}
     </div>

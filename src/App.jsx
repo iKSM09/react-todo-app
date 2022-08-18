@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   MdAddCircleOutline,
   MdTaskAlt,
@@ -11,13 +11,21 @@ import "./App.css";
 function App() {
   const [todos, setTodos] = useState([]);
 
+  useEffect(() => {
+    const todoList = JSON.parse(localStorage.getItem("todos"));
+
+    setTodos(todoList);
+  }, []);
+
   const addNewTask = (e) => {
     if (e.key === "Enter") {
       const newTask = {
         id: new Date().getTime().toString(),
         task: e.target.value,
+        completed: false,
       };
       setTodos([...todos, newTask]);
+      localStorage.setItem("todos", JSON.stringify([...todos, newTask]));
       e.target.value = "";
     }
   };
@@ -30,11 +38,13 @@ function App() {
       return todo;
     });
     setTodos(completedTask);
+    localStorage.todos = JSON.stringify(completedTask);
   };
 
   const deleteTask = (id) => {
     const updatedTodos = todos.filter((todo) => todo.id !== id);
     setTodos(updatedTodos);
+    localStorage.todos = JSON.stringify(updatedTodos);
   };
 
   return (

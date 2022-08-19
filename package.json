@@ -1,7 +1,7 @@
 {
   "name": "react-todo-app",
   "homepage": "https://iksm09.github.io/react-todo-app",
-  "private": true,
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "npm run build && git add dist -f && git commit -m'hosting'  && git subtree push --prefix dist origin gh-pages"
   },
   "dependencies": {
     "react": "^18.2.0",
